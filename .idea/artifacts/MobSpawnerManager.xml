@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MobSpawnerManager">
+    <output-path>$PROJECT_DIR$/../MC-Server-1204/plugins</output-path>
+    <root id="archive" name="MobSpawnerManager.jar">
+      <element id="module-output" name="MobSpawnerManager" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/config.yml" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,4 @@
+
+
+#Message sent to player when they can't use the spawner with current egg.
+failedMsg: "You are not allowed to put this egg into the spawner!"
