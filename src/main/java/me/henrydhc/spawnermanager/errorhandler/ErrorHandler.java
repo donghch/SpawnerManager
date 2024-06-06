@@ -1,4 +1,4 @@
-package me.henrydhc.mobspawnermanager.errorhandler;
+package me.henrydhc.spawnermanager.errorhandler;
 
 public class ErrorHandler {
 

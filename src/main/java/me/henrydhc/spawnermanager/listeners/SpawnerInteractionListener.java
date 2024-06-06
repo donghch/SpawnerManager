@@ -1,12 +1,13 @@
-package me.henrydhc.mobspawnermanager.listeners;
+package me.henrydhc.spawnermanager.listeners;
 
-import me.henrydhc.mobspawnermanager.confighandler.ConfigHandler;
+import me.henrydhc.spawnermanager.confighandler.ConfigHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -194,6 +195,9 @@ public class SpawnerInteractionListener implements Listener {
         if (!event.hasBlock()) {
             return;
         }
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
         block = event.getClickedBlock();
         handItem = event.getItem();
 
@@ -209,12 +213,16 @@ public class SpawnerInteractionListener implements Listener {
             return;
         }
 
-        if (player.hasPermission("mobspawnermanager.use")) {
+        if (player.hasPermission("spawnermanager.use")) {
+            return;
+        }
+
+        if (player.hasPermission("spawnermanager.use.bypass")) {
             return;
         }
 
         event.setCancelled(true);
-        player.sendMessage(ChatColor.RED + "你不能对刷怪笼使用怪物蛋!");
+        player.sendMessage(ChatColor.RED + "你不能对刷怪笼使用这个怪物蛋!");
 
     }
 

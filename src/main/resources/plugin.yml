@@ -1,5 +1,5 @@
-name: MobSpawnerManager
-main: me.henrydhc.mobspawnermanager.SpawnerManager
+name: SpawnerManager
+main: me.henrydhc.spawnermanager.SpawnerManager
 version: 1.0-SNAPSHOT
 api-version: 1.20
 description: Control players' access to spawners.
@@ -7,11 +7,14 @@ permissions:
   use:
     description: Allows player to interact with spawners.
     default: false
+  admin:
+    description: Allows user to execute admin commands
+    default: op
 
 commands:
-  mobspawnermanager:
+  spawnermanager:
     aliases:
-      - msm
-    usage: /mobspawnmanager <options>
-    permission: use
+      - sm
+    usage: /spawnermanager <options>
+    permission: admin
     permission-message: You don't have permission to execute this command!

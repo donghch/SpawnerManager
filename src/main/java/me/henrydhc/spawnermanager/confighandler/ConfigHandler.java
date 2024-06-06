@@ -1,6 +1,6 @@
-package me.henrydhc.mobspawnermanager.confighandler;
+package me.henrydhc.spawnermanager.confighandler;
 
-import me.henrydhc.mobspawnermanager.listeners.SpawnerInteractionListener;
+import me.henrydhc.spawnermanager.listeners.SpawnerInteractionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,10 +19,9 @@ public class ConfigHandler {
 	public static Map<String, Material> entityMapping = IntStream.range(0, SpawnerInteractionListener.eggList.size())
 			.boxed()
 			.collect(Collectors.toMap(i -> SpawnerInteractionListener.entityList.get(i),  i -> SpawnerInteractionListener.eggList.get(i)));
-	private static String DATA_FOLDER_PATH = "./plugins/MobSpawnerManager/";
+	private static String DATA_FOLDER_PATH = "./plugins/SpawnerManager/";
 	private static String[] CONFIG_FIELDS = {
 		"config-version",
-		"enable-permission",
 		"lang",
 		"allowed-mobs"
 	};
@@ -31,7 +30,7 @@ public class ConfigHandler {
 	private FileConfiguration config;
 
 	public ConfigHandler() {
-		parentPlugin = Bukkit.getPluginManager().getPlugin("MobSpawnerManager");
+		parentPlugin = Bukkit.getPluginManager().getPlugin("SpawnerManager");
 		allowedMobs = new ArrayList<>();
 		checkConfig();
 		loadAllowanceData();
@@ -55,6 +54,10 @@ public class ConfigHandler {
 		loadAllowanceData();
 	}
 
+	/**
+	 * Check if config file exists or has valid fields. If it is
+	 * missing or broken then create a new config file.
+	 */
 	private void checkConfig() {
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER_PATH + "config.yml"));
@@ -72,6 +75,9 @@ public class ConfigHandler {
 
 	}
 
+	/**
+	 * Load config from config file.
+	 */
 	private void loadAllowanceData() {
 
 		if (!config.contains("allowed-mobs")) {
@@ -80,9 +86,9 @@ public class ConfigHandler {
 			config = parentPlugin.getConfig();
 		}
 
-		List<String> allowedMobsStrings = config.getStringList("allowed-mobs");
-		for (String mobStr: allowedMobsStrings) {
-			if (SpawnerInteractionListener.entityList.contains(mobStr)) {
+		allowedMobs.clear();
+		for (String mobStr: SpawnerInteractionListener.entityList) {
+			if (config.getConfigurationSection("allowed-mobs").contains(mobStr) && config.getConfigurationSection("allowed-mobs").getBoolean(mobStr)) {
 				allowedMobs.add(SpawnerInteractionListener.eggList.get(SpawnerInteractionListener.entityList.indexOf(mobStr)));
 			}
 		}
