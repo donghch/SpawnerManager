@@ -14,7 +14,7 @@
 
 ## 插件指令
 - /sm reload 重新加载插件配置
-- /sm set <生物名字> <true | false> 设置是否允许将刷怪笼刷怪
+- /sm set <生物名字> <true | false> 设置是否允许对刷怪笼使用该生物的生物蛋
 - /sm moblist 列出所有适用的生物名
 
 ## 插件权限
