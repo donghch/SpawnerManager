@@ -3,18 +3,19 @@ package me.henrydhc.spawnermanager.permissionhandler;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 
 public class PermissionHandler {
 
-	private static Map<String, PermissionDefault> permissions = Map.of(
+	private static final Map<String, PermissionDefault> permissions = Map.of(
 			"spawnermanager.use",
-			PermissionDefault.FALSE,
-			"spawnermanager.admin",
+			PermissionDefault.TRUE,
+			"spawnermanager.reload",
 			PermissionDefault.OP,
-			"spawnermanager.use.bypass",
+			"spawnermanager.bypass",
+			PermissionDefault.FALSE,
+			"spawnermanager.set",
 			PermissionDefault.OP
 	);
 

@@ -3,11 +3,13 @@ package me.henrydhc.spawnermanager.confighandler;
 import me.henrydhc.spawnermanager.listeners.SpawnerInteractionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,17 +18,17 @@ import java.util.stream.IntStream;
 
 public class ConfigHandler {
 
-	public static Map<String, Material> entityMapping = IntStream.range(0, SpawnerInteractionListener.eggList.size())
+	public static final Map<String, Material> entityMapping = IntStream.range(0, SpawnerInteractionListener.eggList.size())
 			.boxed()
 			.collect(Collectors.toMap(i -> SpawnerInteractionListener.entityList.get(i),  i -> SpawnerInteractionListener.eggList.get(i)));
-	private static String DATA_FOLDER_PATH = "./plugins/SpawnerManager/";
-	private static String[] CONFIG_FIELDS = {
+	private static final String DATA_FOLDER_PATH = "./plugins/SpawnerManager/";
+	private static final String[] CONFIG_FIELDS = {
 		"config-version",
 		"lang",
 		"allowed-mobs"
 	};
-	private Plugin parentPlugin;
-	private List<Material> allowedMobs;
+	private final Plugin parentPlugin;
+	private final List<Material> allowedMobs;
 	private FileConfiguration config;
 
 	public ConfigHandler() {
@@ -47,11 +49,41 @@ public class ConfigHandler {
 	}
 
 	/**
+	 * Set whether the egg is allowed or not
+	 * @param egg Target mob egg type
+	 * @param isAllowed Whether allow that egg or not
+	 * @return True on success, False on failure.
+	 */
+	public boolean setValue(String egg, boolean isAllowed) {
+		if (!entityMapping.containsKey(egg.toLowerCase())) {
+			return false;
+		} else {
+			Material eggType = entityMapping.get(egg);
+			if (allowedMobs.contains(eggType) && !isAllowed) {
+				allowedMobs.remove(eggType);
+			} else if (!allowedMobs.contains(eggType) && isAllowed) {
+				allowedMobs.add(eggType);
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Reload plugin configuration
 	 */
 	public void reload() {
 		checkConfig();
 		loadAllowanceData();
+	}
+
+	public void saveConfig() throws IOException {
+		ConfigurationSection allowedMobsSection = config.getConfigurationSection("allowed-mobs");
+
+		for (Map.Entry<String, Material> entry: entityMapping.entrySet()) {
+			allowedMobsSection.set(entry.getKey(), allowedMobs.contains(entry.getValue()));
+		}
+
+		config.save(DATA_FOLDER_PATH + "config.yml");
 	}
 
 	/**

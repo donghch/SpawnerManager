@@ -177,7 +177,7 @@ public class SpawnerInteractionListener implements Listener {
             "zombified-piglin"
     );
 
-    private ConfigHandler configHandler;
+    private final ConfigHandler configHandler;
 
     public SpawnerInteractionListener(ConfigHandler handler) {
         configHandler = handler;
@@ -201,6 +201,7 @@ public class SpawnerInteractionListener implements Listener {
         block = event.getClickedBlock();
         handItem = event.getItem();
 
+
         if (block.getType() != Material.SPAWNER) {
             return;
         }
@@ -209,15 +210,18 @@ public class SpawnerInteractionListener implements Listener {
             return;
         }
 
+        if (!player.hasPermission("spawnermanager.use")) {
+            event.setCancelled(true);
+            player.sendMessage(ChatColor.RED + "你不能对刷怪笼使用这个怪物蛋!");
+            return;
+        }
+
         if (configHandler.isAllowedMobEgg(handItem.getType())) {
             return;
         }
 
-        if (player.hasPermission("spawnermanager.use")) {
-            return;
-        }
 
-        if (player.hasPermission("spawnermanager.use.bypass")) {
+        if (player.hasPermission("spawnermanager.bypass")) {
             return;
         }
 
