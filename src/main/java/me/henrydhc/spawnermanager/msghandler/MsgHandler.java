@@ -11,16 +11,7 @@ public class MsgHandler {
 	private static final String header = "=".repeat(10) + "SpawnerManager" + "=".repeat(10);
 	private static final String footer = "=".repeat(34);
 
-	// Language options
-	public enum LangType {
-		ENGLISH,
-		CHINESE_SIMPLIFIED
-	}
-
-	private final LangType langType;
-
-	public MsgHandler(LangType langType) {
-		this.langType = langType;
+	public MsgHandler() {
 	}
 
 	/* Public Methods */
