@@ -1,6 +1,9 @@
 package me.henrydhc.spawnermanager.listeners;
 
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
+import me.henrydhc.spawnermanager.hook.HookManager;
+import me.henrydhc.spawnermanager.hook.HookType;
+import net.milkbowl.vault2.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -177,7 +181,6 @@ public class SpawnerInteractionListener implements Listener {
             "zombified-piglin"
     );
 
-
     @EventHandler
     public void onPlayerSpawnerInteraction(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -212,17 +215,50 @@ public class SpawnerInteractionListener implements Listener {
         }
 
         if (ConfigLoader.isAllowedMobEgg(handItem.getType())) {
+            if (!doMoneyDeduction(player, handItem.getType())) {
+                event.setCancelled(true);
+                player.sendMessage(ChatColor.RED + "余额不足，不能使用刷怪蛋!");
+            }
             return;
         }
 
 
         if (player.hasPermission("spawnermanager.bypass")) {
+            if (!doMoneyDeduction(player, handItem.getType())) {
+                event.setCancelled(true);
+                player.sendMessage(ChatColor.RED + "余额不足，不能使用刷怪蛋!");
+            }
             return;
         }
 
         event.setCancelled(true);
         player.sendMessage(ChatColor.RED + "你不能对刷怪笼使用这个怪物蛋!");
 
+    }
+
+    /**
+     * Deduct money from player who can place paid mob eggs
+     * @param player Target player
+     * @return `True` if the transaction is success, otherwise `False`.
+     */
+    private boolean doMoneyDeduction(Player player, Material mobType) {
+        double cost = ConfigLoader.getMobCost(mobType);
+        if (cost == 0) {
+            return true;
+        }
+
+        // Use hooked plugin to do transaction
+        if (HookManager.getHookType() == HookType.VAULT_UNLOCKED) {
+            Economy econ = (Economy) HookManager.getEconProvider();
+            return econ.withdraw("SpawnerManager", player.getUniqueId(), BigDecimal.valueOf(cost))
+                .transactionSuccess();
+        } else if (HookManager.getHookType() == HookType.VAULT) {
+            net.milkbowl.vault.economy.Economy econ =
+                (net.milkbowl.vault.economy.Economy) HookManager.getEconProvider();
+            return econ.withdrawPlayer(player, cost).transactionSuccess();
+        } else {
+            return false;
+        }
     }
 
 }
