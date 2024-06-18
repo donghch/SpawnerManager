@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,10 +25,14 @@ public class ConfigLoader {
 	private static final String[] CONFIG_FIELDS = {
 		"config-version",
 		"lang",
-		"allowed-mobs"
+		"allowed-mobs",
+		"enable-mob-cost",
+		"mob-cost"
 	};
 	private static Plugin parentPlugin;
 	private static final List<Material> allowedMobs = new ArrayList<>();
+	private static Boolean enableMobCost;
+	private static final Map<Material, Double> mobCosts = new HashMap<>();
 	private static FileConfiguration config;
 
 	/**
@@ -36,6 +41,11 @@ public class ConfigLoader {
 	 */
 	public static void init(Plugin plugin) {
 		parentPlugin = plugin;
+		checkConfig();
+		loadAllowanceData();
+		loadMobCostData();
+		parentPlugin.getLogger().info("Loaded " + allowedMobs.size() + " mob restriction rules");
+		parentPlugin.getLogger().info("Loaded " + mobCosts.size() + " mob cost rules.");
 	}
 
 	/**
@@ -66,6 +76,21 @@ public class ConfigLoader {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Get cost of placing a mob into the spawner
+	 * @param mobEggMaterial Mob egg material
+	 * @return Cost of placing a mob into the spawner
+	 */
+	public static double getMobCost(Material mobEggMaterial) {
+		if (!enableMobCost) {
+			return 0;
+		}
+		if (!mobCosts.containsKey(mobEggMaterial)) {
+			return 0;
+		}
+		return mobCosts.get(mobEggMaterial);
 	}
 
 	/**
@@ -125,6 +150,32 @@ public class ConfigLoader {
 			}
 		}
 
+	}
+
+	/**
+	 * Load mob cost data
+	 */
+	private static void loadMobCostData() {
+
+		if (!config.contains("enable-mob-cost")) {
+			resetConfig();
+		}
+		enableMobCost = config.getBoolean("enable-mob-cost");
+
+		if (enableMobCost) {
+			ConfigurationSection section = config.getConfigurationSection("mob-cost");
+			for (String mobStr: entityMapping.keySet()) {
+				if (section.contains(mobStr)) {
+					mobCosts.put(entityMapping.get(mobStr), section.getDouble(mobStr));
+				}
+			}
+		}
+	}
+
+	private static void resetConfig() {
+		parentPlugin.saveDefaultConfig();
+		parentPlugin.getLogger().warning("Config file is malformed and it has been set to default value.");
+		config = parentPlugin.getConfig();
 	}
 
 

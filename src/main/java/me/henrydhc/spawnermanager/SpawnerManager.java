@@ -30,6 +30,9 @@ public class SpawnerManager extends JavaPlugin {
         // Hook to VaultUnlocked/Vault Service
         econHook();
 
+        // Load config file
+        ConfigLoader.init(this);
+
     }
 
     @Override
