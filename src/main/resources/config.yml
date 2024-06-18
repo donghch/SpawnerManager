@@ -82,3 +82,9 @@ allowed-mobs:
   zombie-horse: true
   zombie-villager: true
   zombified-piglin: true
+
+# Economy Feature Configuration
+enable-mob-cost: true
+
+mob-cost:
+  zombie: 20
