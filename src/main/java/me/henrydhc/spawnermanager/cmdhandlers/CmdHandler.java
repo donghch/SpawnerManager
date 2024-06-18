@@ -16,7 +16,7 @@ public class CmdHandler implements CommandExecutor {
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
 		if (!(commandSender instanceof Player)) {
-			commandSender.sendMessage(ChatColor.RED + "只有玩家可以使用此指令!");
+			commandSender.sendMessage(LangLoader.MSG_PLAYER_ONLY);
 			return true;
 		}
 
@@ -63,7 +63,7 @@ public class CmdHandler implements CommandExecutor {
 	private boolean setMobUsage(CommandSender sender, String[] args) {
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + "只有玩家可以使用这个指令!");
+			sender.sendMessage(LangLoader.MSG_PLAYER_ONLY);
 			return true;
 		}
 

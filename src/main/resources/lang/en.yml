@@ -10,5 +10,7 @@ noPermissionMsg: "&cYou don't have permission to use this command!"
 reloadComplete: "&aReload Complete"
 #Message sent to player when they don't have enough money
 lackMoney: "&cYou don't have enough balance to put/replace the mob!"
-# Message send to player when mob rule is being set
+# Message sent to player when mob rule is being set
 mobRuleSettled: "&aRule applied"
+# Message sent when the user is not a player
+playerOnly: "&cOnly player can use this command!"

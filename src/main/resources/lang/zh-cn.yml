@@ -11,3 +11,5 @@ reloadComplete: "&a重载插件配置完成"
 lackMoney: "&c操作失败,请检查你的余额"
 # Message send to player when mob rule is being set
 mobRuleSettled: "&a规则修改完成"
+# Message sent when the user is not a player
+playerOnly: "&c只有玩家才能使用此指令!"

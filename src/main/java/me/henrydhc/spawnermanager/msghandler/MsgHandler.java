@@ -54,12 +54,5 @@ public class MsgHandler {
 		player.sendMessage(result);
 	}
 
-	/* Helper Methods */
-
-	private void loadLang() {
-
-	}
-
-
 
 }

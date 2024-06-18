@@ -21,7 +21,8 @@ public class LangLoader {
         "noPermissionMsg",
         "reloadComplete",
         "lackMoney",
-        "mobRuleSettled"
+        "mobRuleSettled",
+        "playerOnly"
     );
     private static final String JAR_LANG_PATH = "lang/";
     private static final String PLUGIN_LANG_PATH = "plugins/SpawnerManager/lang/";
@@ -33,6 +34,8 @@ public class LangLoader {
     public static String MSG_RELOAD_COMPLETE;
     public static String MSG_LACK_MONEY;
     public static String MSG_MOB_RULE_SETTLED;
+    public static String MSG_PLAYER_ONLY;
+
 
     public static boolean loadLang(String type, Plugin plugin) {
         if (supportedLangs.contains(type)) {
@@ -79,6 +82,8 @@ public class LangLoader {
             langFile.getString("lackMoney"));
         MSG_MOB_RULE_SETTLED = MSG_HEADER + ChatColor.translateAlternateColorCodes('&',
             langFile.getString("mobRuleSettled"));
+        MSG_PLAYER_ONLY = MSG_HEADER + ChatColor.translateAlternateColorCodes('&',
+            langFile.getString("playerOnly"));
     }
 
 }
