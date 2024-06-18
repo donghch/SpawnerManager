@@ -23,3 +23,7 @@ commands:
       - sm
     usage: /spawnermanager <options>
     permission-message: You don't have permission to execute this command!
+
+softdepend:
+  - Vault
+  - VaultUnlocked
