@@ -5,9 +5,11 @@
 
 ## 插件测试过的版本
 - 1.20.4
+- 1.20.6
 
 ## 前置插件
 - 任意一款权限插件(本插件经过测试和GroupManager兼容)
+- Vault或者VaultUnlocked(未测试)
 
 ## 插件安装
 将插件放入plugins文件夹并启动服务器
@@ -27,7 +29,7 @@
 插件相关生物名字由AI进行翻译，如有错误之处请指出。
 ```
 #插件配置文件版本
-config-version: 1
+config-version: 2
 #插件语言
 lang: "zh-cn"
 
@@ -187,4 +189,13 @@ allowed-mobs:
   zombie-villager: true
   # 僵尸猪灵
   zombified-piglin: true
+  
+# 经济功能开关
+enable-mob-cost: true
+
+# 如果想对一个生物收费，请在下面添加生物名和其价格
+# 如果使用刷怪蛋失败则不收取
+mob-cost:
+  # 示例：每次对刷怪笼使用僵尸蛋都会被收取20
+  zombie: 20
 ```
