@@ -101,6 +101,10 @@ public class ConfigLoader {
 		loadAllowanceData();
 	}
 
+	/**
+	 * Save config file
+	 * @throws IOException
+	 */
 	public static void saveConfig() throws IOException {
 		ConfigurationSection allowedMobsSection = config.getConfigurationSection("allowed-mobs");
 
@@ -109,6 +113,13 @@ public class ConfigLoader {
 		}
 
 		config.save(DATA_FOLDER_PATH + "config.yml");
+	}
+
+	/**
+	 * Get language setting
+	 */
+	public static String getLang() {
+		return config.getString("lang");
 	}
 
 	/**

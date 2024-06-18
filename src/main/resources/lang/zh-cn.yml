@@ -1,6 +1,13 @@
 
-#
-available-mobs: "可用的怪物类型"
-failedMsg: "你不能对刷怪笼使用这个怪物蛋!"
-noPermissionMsg: "你没有权限使用这个指令!"
-reloadComplete: "插件重载完毕"
+
+header: "[&e刷怪笼系统&f]"
+#Message sent to player when they can't use the spawner with current egg.
+failedMsg: "&c你不能对刷怪笼使用这个怪物蛋"
+#Message sent to player when they have no permission to use mob egg on spawner
+noPermissionMsg: "&c你没有使用这个指令的权限"
+#Messsage sent to op upon reload completion
+reloadComplete: "&a重载插件配置完成"
+#Message sent to player when they don't have enough money
+lackMoney: "&c操作失败,请检查你的余额"
+# Message send to player when mob rule is being set
+mobRuleSettled: "&a规则修改完成"

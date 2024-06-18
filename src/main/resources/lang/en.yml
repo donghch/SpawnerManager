@@ -1,6 +1,14 @@
 
 
+
+header: "[&eSpawnerManager&f]"
 #Message sent to player when they can't use the spawner with current egg.
-failedMsg: "You are not allowed to put this egg into the spawner!"
-noPermissionMsg: "You don't have permission to use this command!"
-reloadComplete: "Reload Complete"
+failedMsg: "&cYou are not allowed to put this egg into the spawner!"
+#Message sent to player when they have no permission to use mob egg on spawner
+noPermissionMsg: "&cYou don't have permission to use this command!"
+#Messsage sent to op upon reload completion
+reloadComplete: "&aReload Complete"
+#Message sent to player when they don't have enough money
+lackMoney: "&cYou don't have enough balance to put/replace the mob!"
+# Message send to player when mob rule is being set
+mobRuleSettled: "&aRule applied"

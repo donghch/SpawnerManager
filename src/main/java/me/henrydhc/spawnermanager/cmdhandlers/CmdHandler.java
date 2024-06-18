@@ -1,7 +1,9 @@
 package me.henrydhc.spawnermanager.cmdhandlers;
 
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
+import me.henrydhc.spawnermanager.lang.LangLoader;
 import me.henrydhc.spawnermanager.msghandler.MsgHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,13 +47,15 @@ public class CmdHandler implements CommandExecutor {
 	private boolean reloadConfig(CommandSender sender) {
 
 		if (!sender.hasPermission("spawnermanager.reload")) {
-			sender.sendMessage(ChatColor.RED + "你没有权限使用这个指令！");
+			sender.sendMessage(LangLoader.MSG_NO_PERMISSION_MSG);
 			return false;
 		}
 
-		sender.sendMessage("正在重载配置文件...");
 		ConfigLoader.reload();
-		sender.sendMessage("配置文件重载完毕");
+		LangLoader.loadLang(ConfigLoader.getLang(), Bukkit.getPluginManager().getPlugin(
+			"SpawnerManager"
+		));
+		sender.sendMessage(LangLoader.MSG_RELOAD_COMPLETE);
 		return true;
 
 	}
@@ -64,7 +68,7 @@ public class CmdHandler implements CommandExecutor {
 		}
 
 		if (!sender.hasPermission("spawnermanager.set")) {
-			sender.sendMessage(ChatColor.RED + "你没有权限使用这个指令!");
+			sender.sendMessage(LangLoader.MSG_NO_PERMISSION_MSG);
 			return true;
 		}
 
@@ -84,7 +88,7 @@ public class CmdHandler implements CommandExecutor {
 			MsgHandler.showFooter((Player)sender);
 		}
 
-		sender.sendMessage(ChatColor.GREEN + "设置完成");
+		sender.sendMessage(LangLoader.MSG_MOB_RULE_SETTLED);
 		return true;
 
 	}

@@ -3,6 +3,7 @@ package me.henrydhc.spawnermanager;
 import me.henrydhc.spawnermanager.cmdhandlers.CmdHandler;
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
 import me.henrydhc.spawnermanager.hook.HookManager;
+import me.henrydhc.spawnermanager.lang.LangLoader;
 import me.henrydhc.spawnermanager.listeners.SpawnerInteractionListener;
 import me.henrydhc.spawnermanager.permissionhandler.PermissionHandler;
 import me.henrydhc.spawnermanager.tabcompleter.TabHelper;
@@ -32,6 +33,12 @@ public class SpawnerManager extends JavaPlugin {
 
         // Load config file
         ConfigLoader.init(this);
+
+        // Load language file
+        if (!LangLoader.loadLang(ConfigLoader.getLang(), this)) {
+            log.severe("Failed to load language file!. Use English as default language!");
+            LangLoader.loadLang("en", this);
+        }
 
     }
 

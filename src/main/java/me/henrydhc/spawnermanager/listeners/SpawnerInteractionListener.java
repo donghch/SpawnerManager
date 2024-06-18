@@ -3,6 +3,7 @@ package me.henrydhc.spawnermanager.listeners;
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
 import me.henrydhc.spawnermanager.hook.HookManager;
 import me.henrydhc.spawnermanager.hook.HookType;
+import me.henrydhc.spawnermanager.lang.LangLoader;
 import net.milkbowl.vault2.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -210,14 +211,14 @@ public class SpawnerInteractionListener implements Listener {
 
         if (!player.hasPermission("spawnermanager.use")) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "你不能对刷怪笼使用这个怪物蛋!");
+            player.sendMessage(LangLoader.MSG_FAILED_MSG);
             return;
         }
 
         if (ConfigLoader.isAllowedMobEgg(handItem.getType())) {
             if (!doMoneyDeduction(player, handItem.getType())) {
                 event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + "余额不足，不能使用刷怪蛋!");
+                player.sendMessage(LangLoader.MSG_LACK_MONEY);
             }
             return;
         }
@@ -226,13 +227,13 @@ public class SpawnerInteractionListener implements Listener {
         if (player.hasPermission("spawnermanager.bypass")) {
             if (!doMoneyDeduction(player, handItem.getType())) {
                 event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + "余额不足，不能使用刷怪蛋!");
+                player.sendMessage(LangLoader.MSG_LACK_MONEY);
             }
             return;
         }
 
         event.setCancelled(true);
-        player.sendMessage(ChatColor.RED + "你不能对刷怪笼使用这个怪物蛋!");
+        player.sendMessage(LangLoader.MSG_FAILED_MSG);
 
     }
 

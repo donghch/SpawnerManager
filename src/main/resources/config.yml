@@ -2,7 +2,7 @@
 #Config version identifier
 config-version: 1
 #Language
-lang: "cn"
+lang: "zh-cn"
 
 allowed-mobs:
   allay: true
