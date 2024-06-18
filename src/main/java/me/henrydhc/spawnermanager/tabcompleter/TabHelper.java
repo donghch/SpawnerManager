@@ -1,6 +1,6 @@
 package me.henrydhc.spawnermanager.tabcompleter;
 
-import me.henrydhc.spawnermanager.confighandler.ConfigHandler;
+import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -28,7 +28,7 @@ public class TabHelper implements TabCompleter {
 				break;
 			case 2:
 				if (strings[0].equalsIgnoreCase("set")) {
-					result.addAll(ConfigHandler.entityMapping.keySet());
+					result.addAll(ConfigLoader.entityMapping.keySet());
 				}
 				break;
 			case 3:

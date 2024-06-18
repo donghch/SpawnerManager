@@ -1,6 +1,6 @@
 package me.henrydhc.spawnermanager.listeners;
 
-import me.henrydhc.spawnermanager.confighandler.ConfigHandler;
+import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -177,11 +177,6 @@ public class SpawnerInteractionListener implements Listener {
             "zombified-piglin"
     );
 
-    private final ConfigHandler configHandler;
-
-    public SpawnerInteractionListener(ConfigHandler handler) {
-        configHandler = handler;
-    }
 
     @EventHandler
     public void onPlayerSpawnerInteraction(PlayerInteractEvent event) {
@@ -216,7 +211,7 @@ public class SpawnerInteractionListener implements Listener {
             return;
         }
 
-        if (configHandler.isAllowedMobEgg(handItem.getType())) {
+        if (ConfigLoader.isAllowedMobEgg(handItem.getType())) {
             return;
         }
 

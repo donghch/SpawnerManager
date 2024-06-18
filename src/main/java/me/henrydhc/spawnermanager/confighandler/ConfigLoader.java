@@ -1,7 +1,6 @@
 package me.henrydhc.spawnermanager.confighandler;
 
 import me.henrydhc.spawnermanager.listeners.SpawnerInteractionListener;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ConfigHandler {
+public class ConfigLoader {
 
 	public static final Map<String, Material> entityMapping = IntStream.range(0, SpawnerInteractionListener.eggList.size())
 			.boxed()
@@ -27,15 +26,16 @@ public class ConfigHandler {
 		"lang",
 		"allowed-mobs"
 	};
-	private final Plugin parentPlugin;
-	private final List<Material> allowedMobs;
-	private FileConfiguration config;
+	private static Plugin parentPlugin;
+	private static final List<Material> allowedMobs = new ArrayList<>();
+	private static FileConfiguration config;
 
-	public ConfigHandler() {
-		parentPlugin = Bukkit.getPluginManager().getPlugin("SpawnerManager");
-		allowedMobs = new ArrayList<>();
-		checkConfig();
-		loadAllowanceData();
+	/**
+	 * Initialize config loader
+	 * @param plugin parent plugin
+	 */
+	public static void init(Plugin plugin) {
+		parentPlugin = plugin;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class ConfigHandler {
 	 * @param mobEgg Mob egg material
 	 * @return True if the egg is allowed, otherwise false.
 	 */
-	public boolean isAllowedMobEgg(Material mobEgg) {
+	public static boolean isAllowedMobEgg(Material mobEgg) {
 		return allowedMobs.contains(mobEgg);
 	}
 
@@ -54,7 +54,7 @@ public class ConfigHandler {
 	 * @param isAllowed Whether allow that egg or not
 	 * @return True on success, False on failure.
 	 */
-	public boolean setValue(String egg, boolean isAllowed) {
+	public static boolean setValue(String egg, boolean isAllowed) {
 		if (!entityMapping.containsKey(egg.toLowerCase())) {
 			return false;
 		} else {
@@ -71,12 +71,12 @@ public class ConfigHandler {
 	/**
 	 * Reload plugin configuration
 	 */
-	public void reload() {
+	public static void reload() {
 		checkConfig();
 		loadAllowanceData();
 	}
 
-	public void saveConfig() throws IOException {
+	public static void saveConfig() throws IOException {
 		ConfigurationSection allowedMobsSection = config.getConfigurationSection("allowed-mobs");
 
 		for (Map.Entry<String, Material> entry: entityMapping.entrySet()) {
@@ -90,7 +90,7 @@ public class ConfigHandler {
 	 * Check if config file exists or has valid fields. If it is
 	 * missing or broken then create a new config file.
 	 */
-	private void checkConfig() {
+	private static void checkConfig() {
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER_PATH + "config.yml"));
 
@@ -110,7 +110,7 @@ public class ConfigHandler {
 	/**
 	 * Load config from config file.
 	 */
-	private void loadAllowanceData() {
+	private static void loadAllowanceData() {
 
 		if (!config.contains("allowed-mobs")) {
 			parentPlugin.saveDefaultConfig();

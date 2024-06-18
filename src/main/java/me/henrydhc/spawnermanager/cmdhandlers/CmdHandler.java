@@ -1,6 +1,6 @@
 package me.henrydhc.spawnermanager.cmdhandlers;
 
-import me.henrydhc.spawnermanager.confighandler.ConfigHandler;
+import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
 import me.henrydhc.spawnermanager.msghandler.MsgHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,12 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdHandler implements CommandExecutor {
-
-	private final ConfigHandler configHandler;
-
-	public CmdHandler(ConfigHandler handler) {
-		configHandler = handler;
-	}
 
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -56,7 +50,7 @@ public class CmdHandler implements CommandExecutor {
 		}
 
 		sender.sendMessage("正在重载配置文件...");
-		configHandler.reload();
+		ConfigLoader.reload();
 		sender.sendMessage("配置文件重载完毕");
 		return true;
 
@@ -84,7 +78,7 @@ public class CmdHandler implements CommandExecutor {
 			return true;
 		}
 
-		if (!configHandler.setValue(args[1], targetValue)) {
+		if (!ConfigLoader.setValue(args[1], targetValue)) {
 			MsgHandler.showHeader((Player)sender);
 			MsgHandler.showAvailableMobs((Player)sender);
 			MsgHandler.showFooter((Player)sender);

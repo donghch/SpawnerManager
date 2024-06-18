@@ -1,13 +1,13 @@
 package me.henrydhc.spawnermanager.msghandler;
 
-import me.henrydhc.spawnermanager.confighandler.ConfigHandler;
+import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 
 public class MsgHandler {
 
-	private static final String[] availableMobs = ConfigHandler.entityMapping.keySet().stream().sorted().toList().toArray(new String[0]);
+	private static final String[] availableMobs = ConfigLoader.entityMapping.keySet().stream().sorted().toList().toArray(new String[0]);
 	private static final String header = "=".repeat(10) + "SpawnerManager" + "=".repeat(10);
 	private static final String footer = "=".repeat(34);
 
