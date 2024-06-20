@@ -1,5 +1,7 @@
 # SpawnerManagerReloaded
 
+![PluginIcon](https://pic.imgdb.cn/item/66744f6cd9c307b7e97cc072.png#pic_center)
+
 SpawnerManagerReloaded is a SpigotMC plugin empowering spawner management. 
 Server owners can limit players' access of replacing mob spawner's mob type and 
 charge player for replacement.
