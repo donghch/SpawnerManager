@@ -1,7 +1,7 @@
 
 
 
-header: "[&eSpawnerManager&f]"
+header: "&f[&eSpawnerManager&f]"
 #Message sent to player when they can't use the spawner with current egg.
 failedMsg: "&cYou are not allowed to put this egg into the spawner!"
 #Message sent to player when they have no permission to use mob egg on spawner
@@ -14,3 +14,5 @@ lackMoney: "&cYou don't have enough balance to put/replace the mob!"
 mobRuleSettled: "&aRule applied"
 # Message sent when the user is not a player
 playerOnly: "&cOnly player can use this command!"
+usage: "&6Usage"
+availableMobs: "&6Available Mobs"

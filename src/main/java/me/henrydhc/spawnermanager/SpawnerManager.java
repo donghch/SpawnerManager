@@ -7,6 +7,7 @@ import me.henrydhc.spawnermanager.lang.LangLoader;
 import me.henrydhc.spawnermanager.listeners.SpawnerInteractionListener;
 import me.henrydhc.spawnermanager.permissionhandler.PermissionHandler;
 import me.henrydhc.spawnermanager.tabcompleter.TabHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class SpawnerManager extends JavaPlugin {
 
         // Get logger instance
         log = getLogger();
-
+        log.info("The current server version is " + Bukkit.getBukkitVersion());
         // Hook to VaultUnlocked/Vault Service
         econHook();
 
