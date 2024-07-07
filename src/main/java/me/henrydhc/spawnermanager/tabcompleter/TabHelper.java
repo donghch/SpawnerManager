@@ -1,6 +1,8 @@
 package me.henrydhc.spawnermanager.tabcompleter;
 
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
+
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -8,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TabHelper implements TabCompleter {
 
@@ -29,7 +32,7 @@ public class TabHelper implements TabCompleter {
 				break;
 			case 2:
 				if (strings[0].equalsIgnoreCase("set")) {
-					result.addAll(ConfigLoader.entityMapping.keySet());
+					result.addAll(ConfigLoader.eggList.stream().map(Material::name).collect(Collectors.toList()));
 				}
 				break;
 			case 3:

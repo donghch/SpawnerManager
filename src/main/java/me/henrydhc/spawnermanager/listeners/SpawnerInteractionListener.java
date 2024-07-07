@@ -218,9 +218,12 @@ public class SpawnerInteractionListener implements Listener {
             return;
         }
 
-        SpawnEggMeta meta = (SpawnEggMeta)handItem.getItemMeta();
-        EntityType entityType = meta.getSpawnedType();
-        MobConfig config = ConfigLoader.getMobConfig(entityType);
+        Material material = handItem.getType();
+        if (!ConfigLoader.eggList.contains(material)) {
+            return;
+        }
+
+        MobConfig config = ConfigLoader.mobConfigMap.get(material);
 
         if (config == null) {
             if (player.hasPermission("spawnermanager.bypass")) {
