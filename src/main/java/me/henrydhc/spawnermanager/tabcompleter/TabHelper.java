@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,8 @@ public class TabHelper implements TabCompleter {
 	private final List<String> subCommands = List.of("moblist", "reload", "set");
 
 	@Override
-	public List<String> onTabComplete(@NonNull CommandSender commandSender,
-									 @NonNull Command command, @NonNull String s, String[] strings) {
+	public List<String> onTabComplete(CommandSender commandSender,
+									 Command command, String s, String[] strings) {
 
 		List<String> result = new ArrayList<>();
 
