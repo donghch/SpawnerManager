@@ -24,7 +24,7 @@ import java.util.List;
 
 
 public class SpawnerInteractionListener implements Listener {
-
+    /* 
     public static List<Material> eggList = Arrays.asList(
             Material.ALLAY_SPAWN_EGG,
             Material.AXOLOTL_SPAWN_EGG,
@@ -184,7 +184,7 @@ public class SpawnerInteractionListener implements Listener {
             "zombie-villager",
             "zombified-piglin"
     );
-
+    */
     @EventHandler
     public void onPlayerSpawnerInteraction(PlayerInteractEvent event) {
         Player player = event.getPlayer();
