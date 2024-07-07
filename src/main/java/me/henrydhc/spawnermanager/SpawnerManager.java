@@ -10,7 +10,6 @@ import me.henrydhc.spawnermanager.tabcompleter.TabHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 public class SpawnerManager extends JavaPlugin {

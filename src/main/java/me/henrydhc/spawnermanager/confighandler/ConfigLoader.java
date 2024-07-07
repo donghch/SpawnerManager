@@ -15,7 +15,11 @@ import org.bukkit.plugin.Plugin;
 
 public class ConfigLoader {
 
+	/** This is a list of eggs we build from bukkit api */
 	public static final List<Material> eggList = new ArrayList<>();
+	/** Stores allowed mobs and their costs. If a mob egg does not exist in this map
+	 * then it should not be allowed in the server & vice versa.
+	 */
 	public static final Map<Material, MobConfig> mobConfigMap = new HashMap<>();
 	private static FileConfiguration config;
 
@@ -43,14 +47,6 @@ public class ConfigLoader {
 	}
 
 	/**
-	 * Get mob config data
-	 * @return Mob config if such config exists. Otherwise return null.
-	 */
-	public static MobConfig getMobConfig(EntityType type) {
-		return mobConfigMap.get(type);
-	}
-
-	/**
 	 * Get language
 	 * @return Language
 	 */
@@ -63,6 +59,13 @@ public class ConfigLoader {
 	 * @param plugin plugin
 	 */
 	public static void saveConfig(Plugin plugin) {
+		ConfigurationSection mobSection = config.getConfigurationSection("mobs");
+
+		// Put all entries in mobConfigMap into the config file
+		for (Map.Entry<Material, MobConfig> configEntry: mobConfigMap.entrySet()) {
+			mobSection.set(getEntity(configEntry.getKey()).name(), 
+				configEntry.getValue().getCost());
+		}
 		plugin.saveConfig();
 	}
 
@@ -72,6 +75,20 @@ public class ConfigLoader {
 	 */
 	public static void reloadConfig(Plugin plugin) {
 		plugin.reloadConfig();
+	}
+
+		/**
+	 * Get egg's corresponding entity
+	 * @param eggMaterial Egg material
+	 * @return entity type or null if the input is invalid
+	 */
+	public static EntityType getEntity(Material eggMaterial) {
+
+		if (!eggList.contains(eggMaterial)) {
+			return null;
+		}
+
+		return EntityType.valueOf(eggMaterial.name().split("_SPAWN_EGG")[0]);
 	}
 
 	/**
@@ -87,20 +104,6 @@ public class ConfigLoader {
 				eggList.add(Material.valueOf(name));
 			}
 		}
-	}
-
-	/**
-	 * Get egg's corresponding entity
-	 * @param eggMaterial Egg material
-	 * @return entity type or null if the input is invalid
-	 */
-	private static EntityType getEntity(Material eggMaterial) {
-
-		if (!eggList.contains(eggMaterial)) {
-			return null;
-		}
-
-		return EntityType.valueOf(eggMaterial.name().split("_SPAWN_EGG")[0]);
 	}
 
 }

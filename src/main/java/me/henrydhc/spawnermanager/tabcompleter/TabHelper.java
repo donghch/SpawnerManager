@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class TabHelper implements TabCompleter {
 
-	private final List<String> subCommands = List.of("moblist", "reload", "set");
+	private final List<String> subCommands = List.of("egglist", "reload", "set");
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender,
