@@ -9,12 +9,19 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class CmdHandler implements CommandExecutor {
 
+	private final Plugin plugin;
+
+	public CmdHandler(Plugin plugin) {
+		this.plugin = plugin;
+	}
+
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-
+			/* 
 		if (!(commandSender instanceof Player)) {
 			commandSender.sendMessage(LangLoader.MSG_PLAYER_ONLY);
 			return true;
@@ -40,7 +47,8 @@ public class CmdHandler implements CommandExecutor {
 				MsgHandler.showGeneralUsageMsg((Player) commandSender);
 				return true;
 			}
-		}
+		}*/
+		return true;
 
 	}
 
@@ -51,7 +59,7 @@ public class CmdHandler implements CommandExecutor {
 			return false;
 		}
 
-		ConfigLoader.reload();
+		ConfigLoader.reloadConfig(plugin);
 		LangLoader.loadLang(ConfigLoader.getLang(), Bukkit.getPluginManager().getPlugin(
 			"SpawnerManager"
 		));
@@ -61,7 +69,7 @@ public class CmdHandler implements CommandExecutor {
 	}
 
 	private boolean setMobUsage(CommandSender sender, String[] args) {
-
+		/* 
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(LangLoader.MSG_PLAYER_ONLY);
 			return true;
@@ -90,6 +98,7 @@ public class CmdHandler implements CommandExecutor {
 
 		sender.sendMessage(LangLoader.MSG_MOB_RULE_SETTLED);
 		return true;
-
+		*/
+		return false;
 	}
 }

@@ -51,8 +51,20 @@ public class ConfigLoader {
 		return config.getString("lang");
 	}
 
+	/**
+	 * Save config files
+	 * @param plugin plugin
+	 */
 	public static void saveConfig(Plugin plugin) {
 		plugin.saveConfig();
+	}
+
+	/**
+	 * Reload config
+	 * @param plugin plugin
+	 */
+	public static void reloadConfig(Plugin plugin) {
+		plugin.reloadConfig();
 	}
 
 	/**
