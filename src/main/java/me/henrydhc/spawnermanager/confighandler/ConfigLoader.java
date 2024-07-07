@@ -92,6 +92,14 @@ public class ConfigLoader {
 	}
 
 	/**
+	 * Check if economy feature is enabled
+	 * @return True if yes, otherwise no
+	 */
+	public static boolean isEconEnabled() {
+		return config.getBoolean("enable-economy");
+	}
+
+	/**
 	 * Build entity mapping.
 	 * This has to be done dynamically as higher versions have more
 	 * mobs

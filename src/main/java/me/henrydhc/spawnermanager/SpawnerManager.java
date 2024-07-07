@@ -28,11 +28,15 @@ public class SpawnerManager extends JavaPlugin {
         // Get logger instance
         log = getLogger();
         log.info("The current server version is " + Bukkit.getBukkitVersion());
-        // Hook to VaultUnlocked/Vault Service
-        econHook();
 
         // Load config file
         ConfigLoader.loadConfig(this);
+
+        // Hook to VaultUnlocked/Vault Service
+        if (ConfigLoader.isEconEnabled()) {
+            econHook();
+        }
+
 
         // Load language file
         if (!LangLoader.loadLang(ConfigLoader.getLang(), this)) {
