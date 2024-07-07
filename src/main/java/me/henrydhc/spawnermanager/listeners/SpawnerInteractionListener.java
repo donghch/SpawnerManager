@@ -1,6 +1,7 @@
 package me.henrydhc.spawnermanager.listeners;
 
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
+import me.henrydhc.spawnermanager.confighandler.MobConfig;
 import me.henrydhc.spawnermanager.hook.HookManager;
 import me.henrydhc.spawnermanager.hook.HookType;
 import me.henrydhc.spawnermanager.lang.LangLoader;
@@ -8,12 +9,14 @@ import net.milkbowl.vault2.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -205,35 +208,37 @@ public class SpawnerInteractionListener implements Listener {
             return;
         }
 
-        if (!eggList.contains(handItem.getType())) {
+        if (!(handItem.getItemMeta() instanceof SpawnEggMeta)) {
             return;
         }
 
         if (!player.hasPermission("spawnermanager.use")) {
             event.setCancelled(true);
-            player.sendMessage(LangLoader.MSG_FAILED_MSG);
+            player.sendMessage(LangLoader.MSG_NO_PERMISSION_MSG);
             return;
         }
 
-        if (ConfigLoader.isAllowedMobEgg(handItem.getType())) {
-            if (!doMoneyDeduction(player, handItem.getType())) {
+        SpawnEggMeta meta = (SpawnEggMeta)handItem.getItemMeta();
+        EntityType entityType = meta.getSpawnedType();
+        MobConfig config = ConfigLoader.getMobConfig(entityType);
+
+        if (config == null) {
+            if (player.hasPermission("spawnermanager.bypass")) {
+                return;
+            } else {
                 event.setCancelled(true);
-                player.sendMessage(LangLoader.MSG_LACK_MONEY);
+                player.sendMessage(LangLoader.MSG_NO_PERMISSION_MSG);
+                return;
             }
-            return;
         }
 
-
-        if (player.hasPermission("spawnermanager.bypass")) {
-            if (!doMoneyDeduction(player, handItem.getType())) {
-                event.setCancelled(true);
-                player.sendMessage(LangLoader.MSG_LACK_MONEY);
-            }
+        if (doMoneyDeduction(player, config.getCost())) {
             return;
         }
 
         event.setCancelled(true);
-        player.sendMessage(LangLoader.MSG_FAILED_MSG);
+        player.sendMessage(LangLoader.MSG_LACK_MONEY);
+        return;
 
     }
 
@@ -242,9 +247,8 @@ public class SpawnerInteractionListener implements Listener {
      * @param player Target player
      * @return `True` if the transaction is success, otherwise `False`.
      */
-    private boolean doMoneyDeduction(Player player, Material mobType) {
-        double cost = ConfigLoader.getMobCost(mobType);
-        if (cost == 0) {
+    private boolean doMoneyDeduction(Player player, double cost) {
+        if (cost <= 0) {
             return true;
         }
 
