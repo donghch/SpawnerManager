@@ -94,7 +94,24 @@ public class ConfigLoader {
 			return null;
 		}
 
-		return EntityType.valueOf(eggMaterial.name().split("_SPAWN_EGG")[0]);
+		EntityType result;
+
+		try {
+			result = EntityType.valueOf(eggMaterial.name().split("_SPAWN_EGG")[0]);
+		} catch (IllegalArgumentException e) {
+			switch (eggMaterial) {
+				case MOOSHROOM_SPAWN_EGG:
+					result = EntityType.MUSHROOM_COW;
+					break;
+				case ZOMBIE_PIGMAN_SPAWN_EGG:
+					result = EntityType.PIG_ZOMBIE;
+					break;
+				default:
+					result = EntityType.UNKNOWN;
+					break;
+			}
+		}
+		return result;
 	}
 
 	/**
