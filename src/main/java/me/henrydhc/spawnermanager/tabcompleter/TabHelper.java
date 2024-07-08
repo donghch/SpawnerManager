@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TabHelper implements TabCompleter {
@@ -32,7 +33,12 @@ public class TabHelper implements TabCompleter {
 				break;
 			case 2:
 				if (strings[0].equalsIgnoreCase("set")) {
-					result.addAll(ConfigLoader.eggList.stream().map(Material::name).collect(Collectors.toList()));
+					result.addAll(ConfigLoader.eggList.stream().map(Material::name)
+					.filter(new Predicate<String>() {
+						public boolean test(String s) {
+							return s.contains(strings[1]);
+						}
+					}).collect(Collectors.toList()));
 				}
 				break;
 			case 3:

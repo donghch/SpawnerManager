@@ -1,6 +1,7 @@
 package me.henrydhc.spawnermanager.confighandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +67,12 @@ public class ConfigLoader {
 			mobSection.set(getEntity(configEntry.getKey()).name(), 
 				configEntry.getValue().getCost());
 		}
-		plugin.saveConfig();
+		
+		try {
+			config.save("plugins/SpawnerManager/config.yml");
+		} catch (IOException e) {
+			plugin.getLogger().severe("Failed to save config");
+		}
 	}
 
 	/**
