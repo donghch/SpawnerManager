@@ -3,7 +3,6 @@ package me.henrydhc.spawnermanager.hook;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class HookManager {
 
@@ -60,7 +59,6 @@ public class HookManager {
      * Get economy service provider
      * @return Economy service provider
      */
-    @Nullable
     public static Object getEconProvider() {
         return econ;
     }

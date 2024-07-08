@@ -1,22 +1,25 @@
 package me.henrydhc.spawnermanager.tabcompleter;
 
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
+
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TabHelper implements TabCompleter {
 
-	private final List<String> subCommands = List.of("moblist", "reload", "set");
+	private final List<String> subCommands = List.of("egglist", "reload", "set");
 
 	@Override
-	public List<String> onTabComplete(@NonNull CommandSender commandSender,
-									 @NonNull Command command, @NonNull String s, String[] strings) {
+	public List<String> onTabComplete(CommandSender commandSender,
+									 Command command, String s, String[] strings) {
 
 		List<String> result = new ArrayList<>();
 
@@ -30,7 +33,12 @@ public class TabHelper implements TabCompleter {
 				break;
 			case 2:
 				if (strings[0].equalsIgnoreCase("set")) {
-					result.addAll(ConfigLoader.entityMapping.keySet());
+					result.addAll(ConfigLoader.eggList.stream().map(Material::name)
+					.filter(new Predicate<String>() {
+						public boolean test(String s) {
+							return s.contains(strings[1]);
+						}
+					}).collect(Collectors.toList()));
 				}
 				break;
 			case 3:

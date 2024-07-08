@@ -2,13 +2,18 @@ package me.henrydhc.spawnermanager.msghandler;
 
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
 import me.henrydhc.spawnermanager.lang.LangLoader;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 
 public class MsgHandler {
 
-	private static final String[] availableMobs = ConfigLoader.entityMapping.keySet().stream().sorted().toList().toArray(new String[0]);
+	private static final List<String> availableEggs = ConfigLoader.eggList.stream().map(Material::name).collect(Collectors.toList());
 	private static final String header = "=".repeat(10) + "SpawnerManager" + "=".repeat(10);
 	private static final String footer = "=".repeat(34);
 
@@ -25,12 +30,12 @@ public class MsgHandler {
 		player .sendMessage(footer);
 	}
 
-	public static void showAvailableMobs(Player player) {
+	public static void showAvailableEggs(Player player) {
 		StringBuilder builder = new StringBuilder()
 			.append(LangLoader.MSG_AVAILABLE_MOBS)
 			.append(": ")
 			.append(ChatColor.GRAY);
-		for (String mob : availableMobs) {
+		for (String mob : availableEggs) {
 			builder.append(String.format("%s ", mob));
 		}
 		builder.append("\n");

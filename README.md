@@ -1,31 +1,28 @@
-# SpawnerManagerReloaded
+# SpawnerManager
 
 ![PluginIcon](https://pic.imgdb.cn/item/66744f6cd9c307b7e97cc072.png#pic_center)
 
-SpawnerManagerReloaded is a SpigotMC plugin empowering spawner management. 
+SpawnerManager is a SpigotMC plugin empowering spawner management. 
 Server owners can limit players' access of replacing mob spawner's mob type and 
-charge player for replacement.
+charge player money for mob type replacement (Need to enable economy feature). 
 
 ## API Version
-- 1.20
+1.14
 
 ## Tested Versions
-- 1.20
-- 1.20.4
-- 1.20.6
+1.14 to 1.20.6
 
 ## Required Plugins
-- Vault or VaultUnlocked(Not tested)
-- Any permission plugin & economy plugin
+- Economy Feature(Optional): Vault & an economy plugin 
 
 ## Installation
 Drop the plugin into the /plugins folder and restart the server.
 
 ## Commands
 - /sm reload Reload plugin config files
-- /sm set <Mob Name> <true|false> Set whether player is allowed to change spawner's mob type
+- /sm set <mob egg name> <true|false> Set whether player is allowed to change spawner's mob type
 to that mob.
-- /sm moblist List all applicable mobs
+- /sm egglist List all applicable mobs
 
 ## Permission Nodes
 - spawnermanager.use Allow to use the spawner (Allowed by default)

@@ -4,87 +4,10 @@ config-version: 2
 #Language
 lang: "zh-cn"
 
-allowed-mobs:
-  allay: true
-  axolotl: true
-  bat: true
-  bee: true
-  blaze: true
-  cat: true
-  camel: true
-  cave-spider: true
-  chicken: true
-  cod: true
-  cow: true
-  creeper: true
-  dolphin: true
-  donkey: true
-  drowned: true
-  elder-guardian: true
-  ender-dragon: true
-  enderman: true
-  endermite: true
-  evoker: true
-  fox: true
-  frog: true
-  ghast: true
-  glow-squid: true
-  goat: true
-  guardian: true
-  hoglins: true
-  horse: true
-  husk: true
-  iron-golem: true
-  llama: true
-  magma-cube: true
-  mooshroom: true
-  mule: true
-  ocelot: true
-  panda: true
-  parrot: true
-  phantom: true
-  pig: true
-  piglin: true
-  piglin-brute: true
-  pillager: true
-  polar-bear: true
-  pufferfish: true
-  rabbit: true
-  ravager: true
-  salmon: true
-  sheep: true
-  shulker: true
-  silverfish: true
-  skeleton: true
-  skeleton-horse: true
-  slime: true
-  sniffer: true
-  snow-golem: true
-  spider: true
-  squid: true
-  stray: true
-  strider: true
-  tadpole: true
-  trader-llama: true
-  tropical-fish: true
-  turtle: true
-  vex: true
-  villager: true
-  vindicator: true
-  wandering-trader: true
-  warden: true
-  witch: true
-  wither: true
-  wither-skeleton: true
-  wolf: true
-  zoglin: true
-  zombie: true
-  zombie-horse: true
-  zombie-villager: true
-  zombified-piglin: true
+# Enable economy functionality
+enable-economy: false
 
-# Economy Feature Configuration
-enable-mob-cost: true
-
-mob-cost:
-  zombie: 20
+# To allow mob to be used on spawner, add it here with value 0
+mobs:
+  # Zombie will be allowed here for $10
+  ZOMBIE: 10

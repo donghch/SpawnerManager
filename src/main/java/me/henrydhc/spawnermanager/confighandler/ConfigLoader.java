@@ -1,194 +1,140 @@
 package me.henrydhc.spawnermanager.confighandler;
 
-import me.henrydhc.spawnermanager.listeners.SpawnerInteractionListener;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.Plugin;
 
 public class ConfigLoader {
 
-	public static final Map<String, Material> entityMapping = IntStream.range(0, SpawnerInteractionListener.eggList.size())
-			.boxed()
-			.collect(Collectors.toMap(i -> SpawnerInteractionListener.entityList.get(i),  i -> SpawnerInteractionListener.eggList.get(i)));
-	private static final String DATA_FOLDER_PATH = "./plugins/SpawnerManager/";
-	private static final String[] CONFIG_FIELDS = {
-		"config-version",
-		"lang",
-		"allowed-mobs",
-		"enable-mob-cost",
-		"mob-cost"
-	};
-	private static Plugin parentPlugin;
-	private static final List<Material> allowedMobs = new ArrayList<>();
-	private static Boolean enableMobCost;
-	private static final Map<Material, Double> mobCosts = new HashMap<>();
+	/** This is a list of eggs we build from bukkit api */
+	public static final List<Material> eggList = new ArrayList<>();
+	/** Stores allowed mobs and their costs. If a mob egg does not exist in this map
+	 * then it should not be allowed in the server & vice versa.
+	 */
+	public static final Map<Material, MobConfig> mobConfigMap = new HashMap<>();
 	private static FileConfiguration config;
 
-	/**
-	 * Initialize config loader
-	 * @param plugin parent plugin
-	 */
-	public static void init(Plugin plugin) {
-		parentPlugin = plugin;
-		checkConfig();
-		loadAllowanceData();
-		loadMobCostData();
-		parentPlugin.getLogger().info("Loaded " + allowedMobs.size() + " mob restriction rules");
-		parentPlugin.getLogger().info("Loaded " + mobCosts.size() + " mob cost rules.");
-	}
+	public static void loadConfig(Plugin plugin) {
 
-	/**
-	 * Check if the input mob egg is allowed in the server. The input material
-	 * should be a mob egg.
-	 * @param mobEgg Mob egg material
-	 * @return True if the egg is allowed, otherwise false.
-	 */
-	public static boolean isAllowedMobEgg(Material mobEgg) {
-		return allowedMobs.contains(mobEgg);
-	}
+		File configFile = new File("plugins/SpawnerManager/config.yml");
+		if (!configFile.isFile()) {
+			plugin.saveDefaultConfig();
+		}
+		config = plugin.getConfig();
 
-	/**
-	 * Set whether the egg is allowed or not
-	 * @param egg Target mob egg type
-	 * @param isAllowed Whether allow that egg or not
-	 * @return True on success, False on failure.
-	 */
-	public static boolean setValue(String egg, boolean isAllowed) {
-		if (!entityMapping.containsKey(egg.toLowerCase())) {
-			return false;
-		} else {
-			Material eggType = entityMapping.get(egg);
-			if (allowedMobs.contains(eggType) && !isAllowed) {
-				allowedMobs.remove(eggType);
-			} else if (!allowedMobs.contains(eggType) && isAllowed) {
-				allowedMobs.add(eggType);
+		/* Since we can't use Bukkit's api to get mob type, we 
+		 * have to build a mapping from mob egg to mob.
+		*/
+		buildEggList();
+		ConfigurationSection mobs = config.getConfigurationSection("mobs");
+		for (Material egg: eggList) {
+			String mobName = getEntity(egg).name();
+			if (mobs.contains(mobName)) {
+				mobConfigMap.put(egg, 
+				new MobConfig(EntityType.valueOf(mobName), mobs.getDouble(mobName)));
 			}
 		}
-		return true;
+
 	}
 
 	/**
-	 * Get cost of placing a mob into the spawner
-	 * @param mobEggMaterial Mob egg material
-	 * @return Cost of placing a mob into the spawner
-	 */
-	public static double getMobCost(Material mobEggMaterial) {
-		if (!enableMobCost) {
-			return 0;
-		}
-		if (!mobCosts.containsKey(mobEggMaterial)) {
-			return 0;
-		}
-		return mobCosts.get(mobEggMaterial);
-	}
-
-	/**
-	 * Reload plugin configuration
-	 */
-	public static void reload() {
-		checkConfig();
-		loadAllowanceData();
-	}
-
-	/**
-	 * Save config file
-	 * @throws IOException
-	 */
-	public static void saveConfig() throws IOException {
-		ConfigurationSection allowedMobsSection = config.getConfigurationSection("allowed-mobs");
-
-		for (Map.Entry<String, Material> entry: entityMapping.entrySet()) {
-			allowedMobsSection.set(entry.getKey(), allowedMobs.contains(entry.getValue()));
-		}
-
-		config.save(DATA_FOLDER_PATH + "config.yml");
-	}
-
-	/**
-	 * Get language setting
+	 * Get language
+	 * @return Language
 	 */
 	public static String getLang() {
 		return config.getString("lang");
 	}
 
 	/**
-	 * Check if config file exists or has valid fields. If it is
-	 * missing or broken then create a new config file.
+	 * Save config files
+	 * @param plugin plugin
 	 */
-	private static void checkConfig() {
+	public static void saveConfig(Plugin plugin) {
+		ConfigurationSection mobSection = config.getConfigurationSection("mobs");
 
-		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER_PATH + "config.yml"));
-
-		// Use plugin's version number to check if it is malformed
-		for (String configKey: CONFIG_FIELDS) {
-			if (!config.contains(configKey)) {
-				parentPlugin.saveDefaultConfig();
-				parentPlugin.getLogger().warning("Config file is malformed and it has been set to default value.");
-				config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER_PATH + "config.yml"));
-				return;
-			}
+		// Put all entries in mobConfigMap into the config file
+		for (Map.Entry<Material, MobConfig> configEntry: mobConfigMap.entrySet()) {
+			mobSection.set(getEntity(configEntry.getKey()).name(), 
+				configEntry.getValue().getCost());
 		}
-
-
+		
+		try {
+			config.save("plugins/SpawnerManager/config.yml");
+		} catch (IOException e) {
+			plugin.getLogger().severe("Failed to save config");
+		}
 	}
 
 	/**
-	 * Load config from config file.
+	 * Reload config
+	 * @param plugin plugin
 	 */
-	private static void loadAllowanceData() {
+	public static void reloadConfig(Plugin plugin) {
+		plugin.reloadConfig();
+	}
 
-		if (!config.contains("allowed-mobs")) {
-			parentPlugin.saveDefaultConfig();
-			parentPlugin.getLogger().warning("Config file is malformed and it has been set to default value.");
-			config = parentPlugin.getConfig();
+		/**
+	 * Get egg's corresponding entity
+	 * @param eggMaterial Egg material
+	 * @return entity type or null if the input is invalid
+	 */
+	public static EntityType getEntity(Material eggMaterial) {
+
+		if (!eggList.contains(eggMaterial)) {
+			return null;
 		}
 
-		allowedMobs.clear();
-		for (String mobStr: SpawnerInteractionListener.entityList) {
-			if (config.getConfigurationSection("allowed-mobs").contains(mobStr) && config.getConfigurationSection("allowed-mobs").getBoolean(mobStr)) {
-				allowedMobs.add(SpawnerInteractionListener.eggList.get(SpawnerInteractionListener.entityList.indexOf(mobStr)));
+		EntityType result;
+
+		try {
+			result = EntityType.valueOf(eggMaterial.name().split("_SPAWN_EGG")[0]);
+		} catch (IllegalArgumentException e) {
+			switch (eggMaterial) {
+				case MOOSHROOM_SPAWN_EGG:
+					result = EntityType.MUSHROOM_COW;
+					break;
+				case ZOMBIE_PIGMAN_SPAWN_EGG:
+					result = EntityType.PIG_ZOMBIE;
+					break;
+				default:
+					result = EntityType.UNKNOWN;
+					break;
 			}
 		}
-
+		return result;
 	}
 
 	/**
-	 * Load mob cost data
+	 * Check if economy feature is enabled
+	 * @return True if yes, otherwise no
 	 */
-	private static void loadMobCostData() {
+	public static boolean isEconEnabled() {
+		return config.getBoolean("enable-economy");
+	}
 
-		if (!config.contains("enable-mob-cost")) {
-			resetConfig();
-		}
-		enableMobCost = config.getBoolean("enable-mob-cost");
-
-		if (enableMobCost) {
-			ConfigurationSection section = config.getConfigurationSection("mob-cost");
-			for (String mobStr: entityMapping.keySet()) {
-				if (section.contains(mobStr)) {
-					mobCosts.put(entityMapping.get(mobStr), section.getDouble(mobStr));
-				}
+	/**
+	 * Build entity mapping.
+	 * This has to be done dynamically as higher versions have more
+	 * mobs
+	 */
+	private static void buildEggList() {
+		Class<Material> materialClass = Material.class;
+		for (Field field: materialClass.getFields()) {
+			String name = field.getName();
+			if (name.contains("SPAWN_EGG")) {
+				eggList.add(Material.valueOf(name));
 			}
 		}
 	}
-
-	private static void resetConfig() {
-		parentPlugin.saveDefaultConfig();
-		parentPlugin.getLogger().warning("Config file is malformed and it has been set to default value.");
-		config = parentPlugin.getConfig();
-	}
-
-
 
 }

@@ -1,20 +1,28 @@
 package me.henrydhc.spawnermanager.cmdhandlers;
 
 import me.henrydhc.spawnermanager.confighandler.ConfigLoader;
+import me.henrydhc.spawnermanager.confighandler.MobConfig;
 import me.henrydhc.spawnermanager.lang.LangLoader;
 import me.henrydhc.spawnermanager.msghandler.MsgHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class CmdHandler implements CommandExecutor {
 
+	private final Plugin plugin;
+
+	public CmdHandler(Plugin plugin) {
+		this.plugin = plugin;
+	}
+
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-
+			
 		if (!(commandSender instanceof Player)) {
 			commandSender.sendMessage(LangLoader.MSG_PLAYER_ONLY);
 			return true;
@@ -31,17 +39,16 @@ public class CmdHandler implements CommandExecutor {
 					MsgHandler.showSetUsageMsg((Player)commandSender);
 					return true;
 				} else {
-					return setMobUsage(commandSender, strings);
+					return setEggUsage(commandSender, strings);
 				}
-			} else if (strings[0].equalsIgnoreCase("moblist")) {
-				MsgHandler.showAvailableMobs((Player) commandSender);
+			} else if (strings[0].equalsIgnoreCase("egglist")) {
+				MsgHandler.showAvailableEggs((Player) commandSender);
 				return true;
 			} else {
 				MsgHandler.showGeneralUsageMsg((Player) commandSender);
 				return true;
 			}
 		}
-
 	}
 
 	private boolean reloadConfig(CommandSender sender) {
@@ -51,7 +58,7 @@ public class CmdHandler implements CommandExecutor {
 			return false;
 		}
 
-		ConfigLoader.reload();
+		ConfigLoader.reloadConfig(plugin);
 		LangLoader.loadLang(ConfigLoader.getLang(), Bukkit.getPluginManager().getPlugin(
 			"SpawnerManager"
 		));
@@ -60,8 +67,8 @@ public class CmdHandler implements CommandExecutor {
 
 	}
 
-	private boolean setMobUsage(CommandSender sender, String[] args) {
-
+	private boolean setEggUsage(CommandSender sender, String[] args) {
+		
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(LangLoader.MSG_PLAYER_ONLY);
 			return true;
@@ -82,14 +89,27 @@ public class CmdHandler implements CommandExecutor {
 			return true;
 		}
 
-		if (!ConfigLoader.setValue(args[1], targetValue)) {
-			MsgHandler.showHeader((Player)sender);
-			MsgHandler.showAvailableMobs((Player)sender);
-			MsgHandler.showFooter((Player)sender);
+		Material eggMaterial;
+		try {
+			eggMaterial = Material.valueOf(args[1]);
+			if (!ConfigLoader.eggList.contains(eggMaterial)) {
+				MsgHandler.showSetUsageMsg((Player) sender);
+				return true;
+			}
+		} catch (Exception e) {
+			// prepare for illegal input
+			MsgHandler.showSetUsageMsg((Player) sender);
+			return true;
+		}
+
+		if (targetValue) {
+			ConfigLoader.mobConfigMap.putIfAbsent(eggMaterial, 
+				new MobConfig(ConfigLoader.getEntity(eggMaterial), 0));
+		} else {
+			ConfigLoader.mobConfigMap.remove(eggMaterial);
 		}
 
 		sender.sendMessage(LangLoader.MSG_MOB_RULE_SETTLED);
 		return true;
-
 	}
 }
