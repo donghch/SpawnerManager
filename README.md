@@ -1,4 +1,4 @@
-# SpawnerManagerReloaded
+# SpawnerManager
 
 ![PluginIcon](https://pic.imgdb.cn/item/66744f6cd9c307b7e97cc072.png#pic_center)
 
