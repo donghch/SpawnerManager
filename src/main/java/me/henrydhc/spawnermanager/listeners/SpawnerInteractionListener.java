@@ -6,10 +6,8 @@ import me.henrydhc.spawnermanager.hook.HookManager;
 import me.henrydhc.spawnermanager.hook.HookType;
 import me.henrydhc.spawnermanager.lang.LangLoader;
 import net.milkbowl.vault2.economy.Economy;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,8 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class SpawnerInteractionListener implements Listener {
