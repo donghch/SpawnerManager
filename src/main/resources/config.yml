@@ -2,7 +2,7 @@
 #Config version identifier
 config-version: 2
 #Language
-lang: "zh-cn"
+lang: "en"
 
 # Enable economy functionality
 enable-economy: false
@@ -10,4 +10,6 @@ enable-economy: false
 # To allow mob to be used on spawner, add it here with value 0
 mobs:
   # Zombie will be allowed here for $10
+  # If you didn't enable economy functionality, 
+  # you still need to put a cost value, and that value will be ignored.
   ZOMBIE: 10
