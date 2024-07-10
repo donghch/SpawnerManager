@@ -29,3 +29,24 @@ to that mob.
 - spawnermanager.reload Allow to use /sm reload command (OP only by default)
 - spawnermanager.bypass Allow to bypass spawner rules (Banned by default)
 - spawnermanager.set Allow to change spawner rules (OP by default)
+
+## Config File
+```
+#Config version identifier
+config-version: 2
+#Language
+lang: "en"
+
+# Enable economy functionality
+enable-economy: false
+
+# To allow mob to be used on spawner, add it here with value 0
+mobs:
+  # Zombie will be allowed here for $10
+  # If you didn't enable economy functionality, 
+  # you still need to put a cost value, and that value will be ignored.
+  ZOMBIE: 10
+```
+
+## Language Support
+Right now the plugin supports English & Simplified Chinese. Translations are welcomed.
