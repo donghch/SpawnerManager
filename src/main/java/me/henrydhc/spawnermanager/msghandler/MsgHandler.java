@@ -56,7 +56,15 @@ public class MsgHandler {
 				LangLoader.MSG_USAGE +
 				": " +
 				ChatColor.WHITE +
-				"/sm set <name> <true|false>\n";
+				"/sm setegg <egg> <true|false>\n";
+		player.sendMessage(result);
+	}
+
+	public static void showSetEconCostUsage(Player player) {
+		String result = ChatColor.GOLD + 
+			LangLoader.MSG_USAGE + 
+			": " + ChatColor.WHITE + 
+			"/sm seteconcost <egg> <value>\n";
 		player.sendMessage(result);
 	}
 

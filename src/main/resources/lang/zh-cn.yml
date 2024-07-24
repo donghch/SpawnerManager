@@ -1,16 +1,19 @@
-
-
 header: "&f[&e刷怪笼系统&f]"
-#Message sent to player when they can't use the spawner with current egg.
+# Message sent to player when they can't use the spawner with current egg.
 failedMsg: "&c你不能对刷怪笼使用这个怪物蛋"
-#Message sent to player when they have no permission to use mob egg on spawner
+# Message sent to player when they have no permission to use mob egg on spawner
 noPermissionMsg: "&c你没有权限"
-#Messsage sent to op upon reload completion
+# Messsage sent to op upon reload completion
 reloadComplete: "&a重载插件配置完成"
-#Message sent to player when they don't have enough money
+# Message sent to player when they don't have enough money
 lackMoney: "&c操作失败,请检查你的余额"
 # Message send to player when mob rule is being set
 mobRuleSettled: "&a规则修改完成"
+# Message sent to player when economy functionality is not available
+econDisabled: "&c经济系统功能未启用"
+# Message sent to player when the specified mob is not in whitelist
+# This will be invoked when someone try to set cost of a mob egg which is not allowed
+mobNotAllowed: "&c指定怪物蛋在游戏内未被设置为允许使用"
 # Message sent when the user is not a player
 playerOnly: "&c只有玩家才能使用此指令!"
 usage: "&6使用方法"

@@ -65,7 +65,7 @@ public class ConfigLoader {
 		// Put all entries in mobConfigMap into the config file
 		for (Map.Entry<Material, MobConfig> configEntry: mobConfigMap.entrySet()) {
 			mobSection.set(getEntity(configEntry.getKey()).name(), 
-				configEntry.getValue().getCost());
+				configEntry.getValue().getEconCost());
 		}
 		
 		try {
@@ -83,7 +83,7 @@ public class ConfigLoader {
 		plugin.reloadConfig();
 	}
 
-		/**
+	/**
 	 * Get egg's corresponding entity
 	 * @param eggMaterial Egg material
 	 * @return entity type or null if the input is invalid

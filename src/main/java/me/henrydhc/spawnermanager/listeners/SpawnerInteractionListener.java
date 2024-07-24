@@ -72,7 +72,7 @@ public class SpawnerInteractionListener implements Listener {
         }
 
         if (ConfigLoader.isEconEnabled()) {
-            boolean deducted = doMoneyDeduction(player, config.getCost());
+            boolean deducted = doMoneyDeduction(player, config.getEconCost());
             if (deducted) {
                 return;
             }

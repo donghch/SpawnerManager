@@ -6,7 +6,7 @@
 
     <groupId>me.henrydhc.spawnermanager</groupId>
     <artifactId>SpawnerManager</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -25,6 +25,10 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
+        <repository>
+            <id>rosewood-repo</id>
+            <url>https://repo.rosewooddev.io/repository/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -39,6 +43,12 @@
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultUnlockedAPI</artifactId>
             <version>2.2</version><!-- Validate this is the most recent version from the CI -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>playerpoints</artifactId>
+            <version>3.2.7</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

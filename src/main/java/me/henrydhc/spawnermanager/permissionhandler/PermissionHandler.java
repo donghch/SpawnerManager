@@ -15,7 +15,9 @@ public class PermissionHandler {
 			PermissionDefault.OP,
 			"spawnermanager.bypass",
 			PermissionDefault.FALSE,
-			"spawnermanager.set",
+			"spawnermanager.set.egg",
+			PermissionDefault.OP, 
+			"spawnermanager.set.cost", 
 			PermissionDefault.OP
 	);
 
