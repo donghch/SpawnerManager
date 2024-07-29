@@ -10,7 +10,6 @@ import java.util.List;
 
 public class LangLoader {
 
-    private static FileConfiguration langFile;
     private static final List<String> supportedLangs = List.of(
         "zh-cn",
         "en"
@@ -26,7 +25,8 @@ public class LangLoader {
         "usage",
         "availableMobs", 
         "econDisabled", 
-        "mobNotAllowed"
+        "mobNotAllowed", 
+        "mobEggCostChanged"
     );
     private static final String JAR_LANG_PATH = "lang/";
     private static final String PLUGIN_LANG_PATH = "plugins/SpawnerManager/lang/";
@@ -43,6 +43,7 @@ public class LangLoader {
     public static String MSG_AVAILABLE_MOBS;
     public static String MSG_ECON_DISABLED;
     public static String MSG_MOB_NOT_ALLOWED;
+    public static String MSG_MOB_COST_CHANGED;
 
     public static boolean loadLang(String type, Plugin plugin) {
         if (supportedLangs.contains(type)) {
@@ -78,6 +79,8 @@ public class LangLoader {
         return true;
     }
 
+    @SuppressWarnings("all")
+    // Just ignore null errors. Those strings are expected to be there.
     private static void loadMsg(FileConfiguration langFile) {
         MSG_HEADER = ChatColor.translateAlternateColorCodes('&', langFile.getString("header")) + " ";
         MSG_FAILED_MSG = MSG_HEADER + ChatColor.translateAlternateColorCodes('&', langFile.getString("failedMsg"));
@@ -99,6 +102,8 @@ public class LangLoader {
             langFile.getString("econDisabled"));
         MSG_MOB_NOT_ALLOWED = MSG_HEADER + ChatColor.translateAlternateColorCodes('&', 
             langFile.getString("mobNotAllowed"));
+        MSG_MOB_COST_CHANGED = MSG_HEADER + ChatColor.translateAlternateColorCodes('&', 
+            langFile.getString("mobEggCostChanged"));
     }
 
 }

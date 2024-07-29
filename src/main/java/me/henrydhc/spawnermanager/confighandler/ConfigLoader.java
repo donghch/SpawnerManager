@@ -1,16 +1,17 @@
 package me.henrydhc.spawnermanager.confighandler;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.henrydhc.spawnermanager.lang.LangLoader;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 
@@ -22,7 +23,7 @@ public class ConfigLoader {
 	 * then it should not be allowed in the server & vice versa.
 	 */
 	public static final Map<Material, MobConfig> mobConfigMap = new HashMap<>();
-	private static FileConfiguration config;
+	private static final FileConfiguration config = new YamlConfiguration();
 
 	public static void loadConfig(Plugin plugin) {
 
@@ -30,7 +31,19 @@ public class ConfigLoader {
 		if (!configFile.isFile()) {
 			plugin.saveDefaultConfig();
 		}
-		config = plugin.getConfig();
+
+		try {
+			config.load(configFile);
+		} catch (Exception e) {
+			// We don't handle that error as it's not our fault
+			e.printStackTrace();
+		}
+
+		// Load language file
+		if (!LangLoader.loadLang(ConfigLoader.getLang(), plugin)) {
+			//log.severe("Failed to load language file!. Use English as default language!");
+			LangLoader.loadLang("en", plugin);
+		}
 
 		/* Since we can't use Bukkit's api to get mob type, we 
 		 * have to build a mapping from mob egg to mob.
@@ -40,8 +53,17 @@ public class ConfigLoader {
 		for (Material egg: eggList) {
 			String mobName = getEntity(egg).name();
 			if (mobs.contains(mobName)) {
+				ConfigurationSection mob = mobs.getConfigurationSection(mobName);
+				Double econCost;
+				List<String> itemCosts;
+
+				// Load economic & item cost
+				econCost = loadEconCost(mob);
+				itemCosts = loadItemCost(mob);
 				mobConfigMap.put(egg, 
-				new MobConfig(EntityType.valueOf(mobName), mobs.getDouble(mobName)));
+					new MobConfig(EntityType.valueOf(mobName), 
+						econCost,
+						itemCosts));
 			}
 		}
 
@@ -60,19 +82,7 @@ public class ConfigLoader {
 	 * @param plugin plugin
 	 */
 	public static void saveConfig(Plugin plugin) {
-		ConfigurationSection mobSection = config.getConfigurationSection("mobs");
 
-		// Put all entries in mobConfigMap into the config file
-		for (Map.Entry<Material, MobConfig> configEntry: mobConfigMap.entrySet()) {
-			mobSection.set(getEntity(configEntry.getKey()).name(), 
-				configEntry.getValue().getEconCost());
-		}
-		
-		try {
-			config.save("plugins/SpawnerManager/config.yml");
-		} catch (IOException e) {
-			plugin.getLogger().severe("Failed to save config");
-		}
 	}
 
 	/**
@@ -80,7 +90,9 @@ public class ConfigLoader {
 	 * @param plugin plugin
 	 */
 	public static void reloadConfig(Plugin plugin) {
-		plugin.reloadConfig();
+		eggList.clear();
+		mobConfigMap.clear();
+		loadConfig(plugin);
 	}
 
 	/**
@@ -135,6 +147,22 @@ public class ConfigLoader {
 				eggList.add(Material.valueOf(name));
 			}
 		}
+	}
+
+	private static Double loadEconCost(ConfigurationSection section) {
+		if (!section.contains("econ-cost")) {
+			return .0;
+		}
+
+		Double result = section.getDouble("econ-cost");
+		if (result.isInfinite() || result.isNaN() || result < 0) {
+			return .0;
+		}
+		return result;
+	}
+
+	private static List<String> loadItemCost(ConfigurationSection section) {
+		return section.getStringList("item-costs");
 	}
 
 }

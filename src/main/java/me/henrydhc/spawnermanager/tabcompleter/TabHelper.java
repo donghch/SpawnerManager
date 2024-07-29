@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class TabHelper implements TabCompleter {
 
-	private final List<String> subCommands = List.of("egglist", "reload", "set");
+	private final List<String> subCommands = List.of("reload");
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender,
@@ -30,22 +30,6 @@ public class TabHelper implements TabCompleter {
 		switch (strings.length) {
 			case 1:
 				result.addAll(subCommands);
-				break;
-			case 2:
-				if (strings[0].equalsIgnoreCase("set")) {
-					result.addAll(ConfigLoader.eggList.stream().map(Material::name)
-					.filter(new Predicate<String>() {
-						public boolean test(String s) {
-							return s.contains(strings[1]);
-						}
-					}).collect(Collectors.toList()));
-				}
-				break;
-			case 3:
-				if (strings[0].equalsIgnoreCase("set")) {
-					result.add("true");
-					result.add("false");
-				}
 				break;
 			default:
 		}

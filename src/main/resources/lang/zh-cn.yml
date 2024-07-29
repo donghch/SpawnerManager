@@ -6,7 +6,7 @@ noPermissionMsg: "&c你没有权限"
 # Messsage sent to op upon reload completion
 reloadComplete: "&a重载插件配置完成"
 # Message sent to player when they don't have enough money
-lackMoney: "&c操作失败,请检查你的余额"
+lackMoney: "&c操作失败,请检查你的余额和背包内物品数量"
 # Message send to player when mob rule is being set
 mobRuleSettled: "&a规则修改完成"
 # Message sent to player when economy functionality is not available

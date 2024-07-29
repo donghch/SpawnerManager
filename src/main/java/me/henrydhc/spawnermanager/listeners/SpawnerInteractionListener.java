@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
 import java.math.BigDecimal;
@@ -40,11 +41,11 @@ public class SpawnerInteractionListener implements Listener {
         handItem = event.getItem();
 
 
-        if (block.getType() != Material.SPAWNER) {
+        if (block == null || block.getType() != Material.SPAWNER) {
             return;
         }
 
-        if (!(handItem.getItemMeta() instanceof SpawnEggMeta)) {
+        if (handItem == null || !(handItem.getItemMeta() instanceof SpawnEggMeta)) {
             return;
         }
 
@@ -72,12 +73,19 @@ public class SpawnerInteractionListener implements Listener {
         }
 
         if (ConfigLoader.isEconEnabled()) {
-            boolean deducted = doMoneyDeduction(player, config.getEconCost());
+            boolean deducted = doMoneyDeduction(player, config.getEconCost(), false);
             if (deducted) {
                 return;
             }
-        } else {
+        }
+
+        boolean itemDeducted = doItemDeduction(player, config.getItemCosts());
+        if (itemDeducted) {
             return;
+        } else {
+            if (ConfigLoader.isEconEnabled()) {
+                doMoneyDeduction(player, config.getEconCost(), true);
+            }
         }
 
         event.setCancelled(true);
@@ -89,9 +97,11 @@ public class SpawnerInteractionListener implements Listener {
     /**
      * Deduct money from player who can place paid mob eggs
      * @param player Target player
+     * @param cost Economy cost
+     * @param recovery If this transaction is for recovery
      * @return `True` if the transaction is success, otherwise `False`.
      */
-    private boolean doMoneyDeduction(Player player, double cost) {
+    private boolean doMoneyDeduction(Player player, double cost, boolean recovery) {
         if (cost <= 0) {
             return true;
         }
@@ -99,15 +109,51 @@ public class SpawnerInteractionListener implements Listener {
         // Use hooked plugin to do transaction
         if (HookManager.getHookType() == HookType.VAULT_UNLOCKED) {
             Economy econ = (Economy) HookManager.getEconProvider();
-            return econ.withdraw("SpawnerManager", player.getUniqueId(), BigDecimal.valueOf(cost))
+            if (recovery) {
+                return econ.deposit("SpawnerManager", player.getUniqueId(), BigDecimal.valueOf(cost))
                 .transactionSuccess();
+            } else {
+                return econ.withdraw("SpawnerManager", player.getUniqueId(), BigDecimal.valueOf(cost))
+                .transactionSuccess();
+            }
+            
         } else if (HookManager.getHookType() == HookType.VAULT) {
             net.milkbowl.vault.economy.Economy econ =
                 (net.milkbowl.vault.economy.Economy) HookManager.getEconProvider();
-            return econ.withdrawPlayer(player, cost).transactionSuccess();
+            if (recovery) {
+                return econ.depositPlayer(player, cost).transactionSuccess();
+            } else {
+                return econ.withdrawPlayer(player, cost).transactionSuccess();
+            }
         } else {
             return false;
         }
+    }
+
+    /**
+     * Take items from player who replace spawner's mob type
+     * @param player Target player
+     * @param items List of items to take
+     * @return `True` on success, otherwise `False`
+     */
+    private boolean doItemDeduction(Player player, ItemStack[] items) {
+        
+        if (items.length <= 0) {
+            return true;
+        }
+
+        PlayerInventory inventory = player.getInventory();
+        for (ItemStack item: items) {
+            if (!inventory.contains(item)) {
+                return false;
+            }
+        }
+
+        for (ItemStack item: items) {
+            inventory.remove(item);
+        }
+
+        return true;
     }
 
 }

@@ -6,7 +6,7 @@ noPermissionMsg: "&cYou don't have permission to do this"
 # Messsage sent to op upon reload completion
 reloadComplete: "&aReload Complete"
 # Message sent to player when they don't have enough money
-lackMoney: "&cYou don't have enough balance to put/replace the mob!"
+lackMoney: "&cYou don't have enough balance/items to put/replace the mob!"
 # Message sent to player when mob rule is being set
 mobRuleSettled: "&aRule applied"
 # Message sent to player when economy functionality is not available

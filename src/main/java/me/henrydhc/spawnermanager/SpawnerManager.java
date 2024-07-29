@@ -37,13 +37,6 @@ public class SpawnerManager extends JavaPlugin {
             econHook();
         }
 
-
-        // Load language file
-        if (!LangLoader.loadLang(ConfigLoader.getLang(), this)) {
-            log.severe("Failed to load language file!. Use English as default language!");
-            LangLoader.loadLang("en", this);
-        }
-
     }
 
     @Override

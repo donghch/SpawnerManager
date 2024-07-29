@@ -12,4 +12,7 @@ mobs:
   # Zombie will be allowed here for $10
   # If you didn't enable economy functionality, 
   # you still need to put a cost value, and that value will be ignored.
-  ZOMBIE: 10
+  ZOMBIE: 
+    econ-cost: 10
+    item-costs:
+    - DIAMOND 1
